@@ -91,12 +91,12 @@ class Main
   def create_route
     puts "Введите название маршрута"
     route_name = gets.chomp.to_s
-    puts "Введите начальную станцию"
-    first_station = gets.chomp.to_s
-    stations << Station.new(first_station) unless stations.include?(first_station)
-    puts "Введите конечную станцию"
+    puts "Выберите начальную станцию"
+    stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
+    first_station = gets.chomp.to_i
+    puts "Выберите конечную станцию"
+    stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
     last_station = gets.chomp.to_s
-    stations << Station.new(last_station) unless stations.include?(last_station)
     route = Route.new(first_station, last_station)
     routes << route
   end
@@ -111,8 +111,9 @@ class Main
     ch_routes = gets.chomp.to_i
           case ch_routes
             when 1
-              puts "Введите станцию которую хотите добавить"
-              station = gets.chomp.to_s
+              puts "Выберите станцию которую хотите добавить"
+              stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
+              station = gets.chomp.to_i
               routes[route_index].add_station(station)
             when 2
               puts "Введите станцию которую хотите удалить"
@@ -186,3 +187,5 @@ class Main
       end
     end
 end
+
+Main.new.menu

@@ -1,13 +1,14 @@
 class Train
 
-   attr_accessor :speed, :train_route, :wagons , :type, :num, :current_stations
+   attr_accessor :speed, :train_route, :wagons , :type, :num, :current_station
 
    def initialize(num, type)
     @num = num.to_s
     @type = type
     @wagons = []
     @speed = 0
-    @current_stations = 0
+    @current_station = 0
+    @train_route = []
    end
 
    def stop
@@ -33,29 +34,28 @@ class Train
 
       def add_route(route)
          @train_route = route
-         @current_stations == @first_station
-         @train_route.stations[@current_stations]
+         @current_station = @train_route.stations.first
       end
 
       def next_station
-         @train_route.stations[@current_stations + 1]
+         @train_route.stations[@current_station + 1]
       end
 
       def prev_station
-         if @current_stations.positive?
-          @train_route.stations[@current_stations - 1]
+         if @current_station.positive?
+          @train_route.stations[@current_station - 1]
          end
       end
 
       def forward
-         @current_stations.station.del_train
+         @current_station.station.del_train
          @next_station.add_train
-         @current_stations += 1
+         @current_station += 1
       end
 
       def back
-         @current_stations.del_train
+         @current_station.del_train
          @prev_station.add_train
-         @current_stations -= 1
+         @current_station -= 1
       end
 end

@@ -3,8 +3,8 @@ class Route
   attr_accessor :stations
 
   def initialize(first_station, last_stattion)
-   @first_station = first_station.to_s
-   @last_stattion = last_stattion.to_s
+   @first_station = first_station
+   @last_stattion = last_stattion
    @stations = [@first_station, @last_stattion]
   end
 
