@@ -124,15 +124,15 @@ class Main
 
   def train_route
     puts "Выбери поезд, которому назначиить маршрут"
-    trains.each_with_index {|train, index| puts "#{train.num}: #{index}"}
-    train = gets.chomp.to_i
-    puts "Выбран поезд #{trains[train]}"
+    trains.each_with_index {|train, index| puts "#{train.num} - #{train.type}: #{index}"}
+    train_index = gets.chomp.to_i
+    puts "Выбран поезд #{trains[train_index]}"
     puts "Выбери номер маршрута"
     routes.each_with_index {|name, index| puts "#{name}: #{index}"}
     route_index = gets.chomp.to_i
     puts "Выбран маршрут #{routes[route_index]}"
-    trains[train].add_route(routes[route_index])
-    puts "Поезду #{trains[train]} присвоен маршрут #{routes[route_index]}"
+    trains[train_index].add_route(routes[route_index])
+    puts "Поезду #{trains[train_index]} присвоен маршрут #{routes[route_index]}"
   end
 
   def change_wagons
