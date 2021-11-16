@@ -93,10 +93,14 @@ class Main
     route_name = gets.chomp.to_s
     puts "Выберите начальную станцию"
     stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
-    first_station = gets.chomp.to_i
+    first_station_index = gets.chomp.to_i
+    first_station = stations[first_station_index]
+    puts "#{first_station}"
     puts "Выберите конечную станцию"
     stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
-    last_station = gets.chomp.to_s
+    last_station_index = gets.chomp.to_i
+    last_station = stations[last_station_index]
+    puts "#{last_station}"
     route = Route.new(first_station, last_station)
     routes << route
   end
