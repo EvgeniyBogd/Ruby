@@ -1,6 +1,11 @@
+require_relative 'manufacturer'
+require_relative 'instancecounter'
+
 class Train
 
   attr_accessor :speed, :route, :wagons, :num, :type
+  include InstanceCounter
+  include Manufacturer
 
   @@trains = []
 
@@ -20,6 +25,7 @@ class Train
     @wagons = []
     @speed = 0
     @@trains << self
+    register_instance
   end
 
   def stop
