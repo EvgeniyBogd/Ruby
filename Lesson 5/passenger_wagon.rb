@@ -1,7 +1,7 @@
 class Passenger_wagon < Wagon
-  
+
   def initialize(type = :Passenger)
-  	super 
+  	super
   end
 
-end	
+end

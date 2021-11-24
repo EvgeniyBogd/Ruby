@@ -1,4 +1,4 @@
-require_relative 'instancecounter'
+require_relative 'instance_counter'
 
 class Station
   attr_reader :trains, :name
@@ -27,7 +27,7 @@ class Station
     trains.select {|train| train.type == type}.size
  end
 
- def del_train(train)
+ def delete_train(train)
     trains.delete(train)
  end
 

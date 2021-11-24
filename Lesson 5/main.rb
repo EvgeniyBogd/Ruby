@@ -77,14 +77,14 @@ class Main
     case type_train
       when 1
         puts "Введите номер пассажирского поезда"
-        num_train = gets.chomp.to_s
-        trains << Passenger_train.new(num_train)
-        puts "Создан пассажирский поезд #{num_train}"
+        number_train = gets.chomp.to_s
+        trains << Passenger_train.new(number_train)
+        puts "Создан пассажирский поезд #{number_train}"
       when 2
         puts "Введите номер грузового поезда"
-        num_train = gets.chomp.to_s
-        trains << Cargo_train.new(num_train)
-        puts "Создан грузовой поезд #{num_train}"
+        number_train = gets.chomp.to_s
+        trains << Cargo_train.new(number_train)
+        puts "Создан грузовой поезд #{number_train}"
     end
   end
 
@@ -112,8 +112,8 @@ class Main
     puts "Выбран маршрут #{routes[route_index]}"
     puts "1. Добавить станцию"
     puts "2. Удалить станцию"
-    ch_routes = gets.chomp.to_i
-          case ch_routes
+    choice_routes = gets.chomp.to_i
+          case choice_routes
             when 1
               puts "Выберите станцию которую хотите добавить"
               stations.each_with_index{|station, index| puts "#{station.name}: #{index}"}
@@ -122,13 +122,13 @@ class Main
             when 2
               puts "Введите станцию которую хотите удалить"
               station = gets.chomp.to_s
-              routes[route_index].del_station(station)
+              routes[route_index].delete_station(station)
           end
   end
 
   def train_route
     puts "Выбери поезд, которому назначиить маршрут"
-    trains.each_with_index {|train, index| puts "#{train.num} - #{train.type}: #{index}"}
+    trains.each_with_index {|train, index| puts "#{train.number} - #{train.type}: #{index}"}
     train_index = gets.chomp.to_i
     puts "Выбран поезд #{trains[train_index]}"
     puts "Выбери номер маршрута"
@@ -141,7 +141,7 @@ class Main
 
   def change_wagons
     puts "Выбери поезд, у которого необходимо изменить кол-во вагонов"
-    trains.each_with_index {|train, index| puts "#{train.num}: #{index}"}
+    trains.each_with_index {|train, index| puts "#{train.number}: #{index}"}
     train = gets.chomp.to_i
     puts "Выбран поезд #{trains[train]}"
     puts "Выбери что нужно сделать:
@@ -157,16 +157,16 @@ class Main
         end
       when 2
         if trains[train].type == :Cargo
-          trains[train].del_wagon(Cargo_wagon.new)
+          trains[train].delete_wagon(Cargo_wagon.new)
         else
-          trains[train].del_wagon(Passenger_wagon.new)
+          trains[train].delete_wagon(Passenger_wagon.new)
         end
       end
   end
 
   def move_train
     puts "Выбери поезд, который необходимо переместить"
-    trains.each_with_index {|train, index| puts "#{train.num}: #{index}"}
+    trains.each_with_index {|train, index| puts "#{train.number}: #{index}"}
     train = gets.chomp.to_i
     puts "Выбран поезд #{trains[train]}"
     puts "Выбери станцию, на которую переместить поезд"
@@ -184,7 +184,7 @@ class Main
       stations.each do |station|
         puts " На станции #{station.name}:"
           if station.trains.size >=1
-          station.trains.each {|train| puts "#{train.num}"}
+          station.trains.each {|train| puts "#{train.number}"}
           else
           puts "Nothing"
           end
