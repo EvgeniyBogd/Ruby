@@ -2,8 +2,8 @@ class Cargo_wagon < Wagon
 
   attr_reader :volume
 
-  def initialize(type = :Cargo, volume)
-    super
+  def initialize(number, volume)
+    super number, :Cargo
     @volume = volume.to_f
     @busy_volume = 0
   end

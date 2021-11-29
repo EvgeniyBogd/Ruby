@@ -2,8 +2,8 @@ class Passenger_wagon < Wagon
 
   attr_reader :places
 
-  def initialize(type = :Passenger, places)
-  	super
+  def initialize(number, places)
+  	super number, :Passenger
     @places = places.to_i
     @occupied_place = 0
   end

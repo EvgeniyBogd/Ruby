@@ -7,10 +7,12 @@ TYPE_WAGON = /[cargo][passenger]/i
 
 
     attr_reader :type
+    attr_reader :number
 
     include Manufacturer
 
-  def initialize(type)
+  def initialize(number, type)
+    @number = number
     @type = type
     validate!
   end

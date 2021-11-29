@@ -16,20 +16,27 @@ class Main
   3. Создать маршрут
   4. Изменить маршрут
   5. Назначить поезду маршрут
-  6. Изменить количество вагонов
-  7. Переместить поезд по маршруту
-  8. Посмотреть список станций
-  9. Посмотреть список поездов"
+  6. Создать вагон
+  7. Изменить количество вагонов
+  8. Переместить поезд по маршруту
+  9. Посмотреть список станций
+  10. Посмотреть список поездов
+  11. Посмотреть список вагонов у поезда
+  12. Посмотреть список поездов на станции
+  13. Занять место в пассажирском вагоне
+  14. Занять местов грузовом вагоне"
 
   attr_accessor :trains,
                 :stations,
-                :routes
+                :routes,
+                :wagons
 
 
   def initialize
     @trains = []
     @routes = []
     @stations = []
+    @wagons = []
   end
 
   def menu
@@ -48,13 +55,23 @@ class Main
         when 5
           train_route
         when 6
-          change_wagons
+          create_wagon
         when 7
-          move_train
+          change_wagons
         when 8
-          stations_list
+          move_train
         when 9
+          stations_list
+        when 10
           trains_list
+        when 11
+          train_wagons
+        when 12
+          station_trains
+        when 13
+          take_place
+        when 14
+          reduse_volume
       end
      break if answer == 0
    end
@@ -144,30 +161,64 @@ class Main
     puts "Поезду #{trains[train_index]} присвоен маршрут #{routes[route_index]}"
   end
 
-  def change_wagons
-    puts "Выбери поезд, у которого необходимо изменить кол-во вагонов"
-    trains.each_with_index {|train, index| puts "#{train.number}: #{index}"}
-    train = gets.chomp.to_i
-    puts "Выбран поезд #{trains[train]}"
-    puts "Выбери что нужно сделать:
-    1. Прицепить вагон
-    2. Отцепить вагон"
+  def create_wagon
+    puts "Выбери тип вагона который хочешь создать"
+    puts "1. Пассажирский"
+    puts "2. Грузовой"
+    action = gets.chomp.to_i
+     case action
+       when 1
+         puts "Чтобы создать пассажирский вагон, укажи его номер"
+         number = gets.chomp.to_i
+         puts "Укажи количество мест в вагоне"
+         places = gets.chomp.to_i
+         wagons << Passenger_wagon.new(number,places)
+         puts "Создан пассажирский вагон #{number}, количество мест #{places}"
+      when 2
+        puts "Чтобы создать грузовой вагон, укажи его номер"
+        number = gets.chomp.to_i
+        puts "Укажи объем вагона"
+        volume = gets.chomp.to_f
+        wagons << Cargo_wagon.new(number,volume)
+        puts "Создан грузовой вагон #{number}, объемом #{volume}"
+      end
+  end
+ def change_wagons
+   puts "Выбери поезд, у которого необходимо изменить кол-во вагонов"
+   trains.each_with_index {|train, index| puts "#{train.number} - #{train.type}: #{index}"}
+   train = gets.chomp.to_i
+   puts "Выбран поезд #{trains[train]} тип поезда #{trains[train].type}"
+   puts "Выбери что нужно сделать:
+   1. Прицепить вагон
+   2. Отцепить вагон"
     action = gets.chomp.to_i
       case action
       when 1
-        if trains[train].type == :Cargo
-          trains[train].add_wagon(Cargo_wagon.new)
+        puts "Выбери вагон, который необходимо прицепить"
+        wagons.each_with_index {|wagon, index| puts "#{wagon.number} - #{wagon.type}: #{index}"}
+        wagon = gets.chomp.to_i
+        puts "Выбран вагон #{wagons[wagon].number} - #{wagons[wagon].type}"
+        if trains[train].wagons.include?(wagons[wagon])
+          puts "Вагон уже прицеплен"
+        elsif trains[train].type == wagons[wagon].type
+          trains[train].add_wagon(wagons[wagon])
+          puts "Прицеплен вагон #{wagons[wagon].number}"
         else
-          trains[train].add_wagon(Passenger_wagon.new)
+          puts "Выбери другой вагон"
         end
       when 2
-        if trains[train].type == :Cargo
-          trains[train].delete_wagon(Cargo_wagon.new)
+        puts "Выбери вагон, который необходимо отцепить"
+        wagons.each_with_index {|wagon, index| puts "#{wagon.number} - #{wagon.type}: #{index}"}
+        wagon = gets.chomp.to_i
+        puts "Выбран вагон #{wagons[wagon].number} - #{wagons[wagon].type}"
+        if trains[train].wagons.include?(wagons[wagon])
+          trains[train].delete_wagon(wagons[wagon])
+          puts "Отцеплен вагон #{wagons[wagon].number}"
         else
-          trains[train].delete_wagon(Passenger_wagon.new)
+          puts "Такого вагона нет в составе"
         end
       end
-  end
+ end
 
   def move_train
     puts "Выбери поезд, который необходимо переместить"
@@ -194,6 +245,54 @@ class Main
             puts "Nothing"
           end
       end
+  end
+
+  def train_wagons
+    puts "Выбери поезд у которого необходимо посмотреть вагоны"
+    trains.each_with_index {|train, index| puts "#{train.number}: #{index}"}
+    train = gets.chomp.to_i
+    puts "Выбран поезд #{trains[train]}"
+    trains[train].each_wagon {|x| puts x}
+  end
+
+  def station_trains
+    uts "Выбери станцию у которой необходимо посмотреть поезда"
+    stations.each_with_index {|station, index| puts "#{station.name}: #{index}"}
+    station = gets.chomp.to_i
+    puts "Выбрана станция #{stations[station]}"
+    stations[station].each_train {|x| puts x}
+  end
+
+  def take_place
+    puts "Выбери вагон в котором необходимо занять место"
+    wagons.each_with_index do |wagon, index|
+      if wagon.type == :Passenger
+        puts "#{wagon.number}: #{index}"
+      end
+    end
+    wagon = gets.chomp.to_i
+    puts "Выбран вагон #{wagons[wagon].number} - свободных мест #{wagons[wagon].free_places}"
+    puts "Чтобы занять место нажми 1"
+    action = gets.chomp.to_i
+     if action == 1
+       wagons[wagon].take_place
+       puts "Осталось мест #{wagons[wagon].free_places}"
+     end
+  end
+
+  def reduse_volume
+    puts "Выбери вагон в котором необходимо занять место"
+    wagons.each_with_index do |wagon, index|
+      if wagon.type == :Cargo
+        puts "#{wagon.number}: #{index}"
+      end
+    end
+    wagon = gets.chomp.to_i
+    puts "Выбран вагон #{wagons[wagon].number} - свободного места #{wagons[wagon].free_volume}"
+    puts "Чтобы занять место, укажи объем не превышающий доступный объем"
+    busy_volume = gets.chomp.to_f
+       wagons[wagon].reduse_volume(busy_volume)
+       puts "Осталось места #{wagons[wagon].free_volume}"
   end
 end
 Main.new.menu
