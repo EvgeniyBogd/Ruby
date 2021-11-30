@@ -1,24 +1,11 @@
 class Cargo_wagon < Wagon
 
-  attr_reader :volume
-
-  def initialize(number, volume)
-    super number, :Cargo
-    @volume = volume.to_f
-    @busy_volume = 0
+  def initialize(number, places)
+    super number, :Cargo, places.to_f
   end
 
-  def reduse_volume(busy_volume)
-    @busy_volume += busy_volume.to_f if @busy_volume + busy_volume.to_f < volume
-  end
-
-  def busy_volume
-    @busy_volume
-  end
-
-  def free_volume
-    @free_volume = volume - @busy_volume
-    @free_volume
+  def reduse_volume(occupied_place)
+    @occupied_places += occupied_place.to_f if @occupied_places + occupied_place.to_f < places
   end
 
 end

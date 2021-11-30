@@ -178,9 +178,9 @@ class Main
         puts "Чтобы создать грузовой вагон, укажи его номер"
         number = gets.chomp.to_i
         puts "Укажи объем вагона"
-        volume = gets.chomp.to_f
-        wagons << Cargo_wagon.new(number,volume)
-        puts "Создан грузовой вагон #{number}, объемом #{volume}"
+        places = gets.chomp.to_f
+        wagons << Cargo_wagon.new(number,places)
+        puts "Создан грузовой вагон #{number}, объемом #{places}"
       end
   end
  def change_wagons
@@ -288,11 +288,11 @@ class Main
       end
     end
     wagon = gets.chomp.to_i
-    puts "Выбран вагон #{wagons[wagon].number} - свободного места #{wagons[wagon].free_volume}"
+    puts "Выбран вагон #{wagons[wagon].number} - свободного места #{wagons[wagon].free_places}"
     puts "Чтобы занять место, укажи объем не превышающий доступный объем"
-    busy_volume = gets.chomp.to_f
-       wagons[wagon].reduse_volume(busy_volume)
-       puts "Осталось места #{wagons[wagon].free_volume}"
+    occupied_place = gets.chomp.to_f
+       wagons[wagon].reduse_volume(occupied_place)
+       puts "Осталось места #{wagons[wagon].free_places}"
   end
 end
 Main.new.menu
