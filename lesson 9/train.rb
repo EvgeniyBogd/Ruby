@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'manufacturer'
 require_relative 'instance_counter'
 require_relative 'accessors'
@@ -11,12 +9,11 @@ class Train
   include InstanceCounter
   include Manufacturer
 
-  TRAIN_NUMBER = /^[а-яa-z0-9]{3}?-?[а-яa-z0-9]{2}$/i.freeze
-  TRAIN_TYPE = /[cargo][passenger]/i.freeze
-
   validate :number, :presence
-  validate :number, :format, TRAIN_NUMBER
-  validate :type, :format, TRAIN_TYPE
+  validate :number, :format, /^[а-яa-z0-9]{3}?-?[а-яa-z0-9]{2}$/i
+  validate :number, :type, String
+  validate :type, :format, /[cargo][passenger]/i
+  validate :type, :type, String
 
   attr_accessor :speed, :route, :wagons, :number, :type
 

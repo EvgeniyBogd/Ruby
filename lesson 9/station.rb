@@ -3,11 +3,13 @@
 require_relative 'instance_counter'
 
 class Station
-  attr_reader :trains, :name
 
-  STATION_NAME = /[а-яa-z1-9]/.freeze
-
+  include Validation
   include InstanceCounter
+
+  validate :name, :format, /[а-яa-z1-9]/
+
+  attr_reader :trains, :name
 
   @@all_stations = []
 
@@ -24,12 +26,7 @@ class Station
     register_instance
   end
 
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
+
 
   def each_train(&block)
     trains.each(&block)
@@ -47,9 +44,4 @@ class Station
     trains.select { |train| train.type == type }.size
   end
 
-  protected
-
-  def validate!
-    raise 'Incorrect name' if name !~ STATION_NAME
-  end
 end
